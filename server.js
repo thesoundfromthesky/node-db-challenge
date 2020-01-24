@@ -17,7 +17,8 @@ server.post("/api/resources", async (req, res) => {
 
 server.get("/api/projects", async (req, res) => {
   const projects = await db("projects");
-  res.status(200).json(projects);
+
+  res.status(200).json(conversion(projects));
 });
 
 server.post("/api/projects", async (req, res) => {
@@ -36,7 +37,8 @@ server.get("/api/projects/tasks", async (req, res) => {
       "t.notes as Task Notes",
       "t.completed as Task completed"
     ]);
-  res.status(200).json(tasks);
+
+  res.status(200).json(conversion2(tasks));
 });
 
 server.post("/api/projects/:id/tasks", async (req, res) => {
@@ -45,4 +47,24 @@ server.post("/api/projects/:id/tasks", async (req, res) => {
   res.status(201).json(tasks);
 });
 
+function conversion(arr) {
+  return arr.map(el => {
+    if (el.completed) {
+      el.completed = true;
+    } else el.completed = false;
+    return el;
+  });
+}
+
+function conversion2(arr) {
+  return arr.map(el => {
+    if (el["Project Completed"]) {
+      el["Project Completed"] = true;
+    } else el["Project Completed"] = false;
+    if (el["Task Completed"]) {
+      el["Task completed"] = true;
+    } else el["Task completed"] = false;
+    return el;
+  });
+}
 module.exports = server;

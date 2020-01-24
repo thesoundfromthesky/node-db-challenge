@@ -28,8 +28,11 @@ exports.up = function(knex) {
     })
     .createTable("resources", tbl => {
       tbl.increments();
-      tbl.text("name", 128).notNullable();
-      tbl.text("description", 256).unique();
+      tbl
+        .text("name", 128)
+        .notNullable()
+        .unique();
+      tbl.text("description", 256);
     })
     .createTable("project_resources", tbl => {
       tbl
